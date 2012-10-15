@@ -10,7 +10,10 @@
 
 @class DetailViewController;
 
-@interface MasterViewController : UITableViewController
+@interface MasterViewController : UITableViewController{
+    NSMutableArray *playersArray;
+
+}
 
 @property (strong, nonatomic) DetailViewController *detailViewController;
 

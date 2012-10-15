@@ -17,76 +17,121 @@
 
 @implementation MasterViewController
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.title = NSLocalizedString(@"Master", @"Master");
-    }
-    return self;
-}
-							
-- (void)dealloc
-{
-    [_detailViewController release];
-    [_objects release];
-    [super dealloc];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.leftBarButtonItem = self.editButtonItem;
-
-    UIBarButtonItem *addButton = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(insertNewObject:)] autorelease];
-    self.navigationItem.rightBarButtonItem = addButton;
+	
+	playersArray = [[NSMutableArray alloc] initWithCapacity:12];
+	[playersArray addObject:@"Who´s Irish"];
+	[playersArray addObject:@"Who´s Irish"];
+	[playersArray addObject:@"Toil & Temptation"];
+	[playersArray addObject:@"Immigration Great Britain"];
+    [playersArray addObject:@"Long nights,low pay and no play"];
+	[playersArray addObject:@"My son the fanatic"];
+	[playersArray addObject:@"My son the fanatic + You cant go home again"];
+    [playersArray addObject:@"Skriveværksted"];
+	[playersArray addObject:@"A very short story"];
+	[playersArray addObject:@"Cat in the rain"];
+    [playersArray addObject:@"Hills like white elephants"];
+	[playersArray addObject:@"Soldier´s home + Indian Camp"];
+    
+        
+	self.navigationItem.title = @"Engelsk Tekster";
+    
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation-background"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation-background"] forBarMetrics:UIBarMetricsLandscapePhone];
+    
+    
 }
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    return NO;
+}
+
 
 - (void)didReceiveMemoryWarning
 {
+    // Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    // Release any cached data, images, etc. that aren't in use.
 }
 
-- (void)insertNewObject:(id)sender
+- (void)viewDidUnload
 {
-    if (!_objects) {
-        _objects = [[NSMutableArray alloc] init];
-    }
-    [_objects insertObject:[NSDate date] atIndex:0];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-    [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [super viewDidUnload];
+    // Release any retained subviews of the main view.
+    // e.g. self.myOutlet = nil;
 }
 
-#pragma mark - Table View
+
+#pragma mark -
+#pragma mark Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
 
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _objects.count;
+    return [playersArray count];
 }
 
-// Customize the appearance of table view cells.
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier] autorelease];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
 
 
-    NSDate *object = _objects[indexPath.row];
-    cell.textLabel.text = [object description];
+    cell.textLabel.text = [playersArray objectAtIndex:indexPath.row];
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.textLabel.textColor=[UIColor blackColor];
+    cell.textLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:14.0];
+    NSUInteger row = [indexPath row];
+    NSString *rowValue = [playersArray objectAtIndex:row];
+	NSString *imgValue = [rowValue stringByAppendingString: @".png"];
+	UIImage *image = [UIImage imageNamed:imgValue];
+	cell.imageView.image = image;
+    row = [indexPath row];
+    cell.textLabel.text = [playersArray objectAtIndex:row];
+	cell.detailTextLabel.textColor = [UIColor grayColor];
+    cell.detailTextLabel.font = [UIFont fontWithName:@"Trebuchet MS" size:16.0];
+    cell.selectionStyle = UITableViewCellSelectionStyleBlue;
+    
+    if (row < 1)
+        cell.detailTextLabel.text = @"25/9";
+    else if(row < 2)
+        cell.detailTextLabel.text = @"27/9";
+    else if(row < 3)
+        cell.detailTextLabel.text = @"28/9";
+    else if(row < 4)
+        cell.detailTextLabel.text = @"1/10";
+    else if(row < 5)
+        cell.detailTextLabel.text = @"2/10";
+    else if(row < 6)
+        cell.detailTextLabel.text = @"4/10";
+    else if(row < 7)
+        cell.detailTextLabel.text = @"5/10";
+    else if(row < 8)
+        cell.detailTextLabel.text = @"8/10";
+    else if(row < 9)
+        cell.detailTextLabel.text = @"9/10";
+    else if(row < 10)
+        cell.detailTextLabel.text = @"11/10";
+    else if(row < 11)
+        cell.detailTextLabel.text = @"12/10";
     return cell;
 }
+
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -94,15 +139,6 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [_objects removeObjectAtIndex:indexPath.row];
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }
-}
 
 /*
 // Override to support rearranging the table view.
